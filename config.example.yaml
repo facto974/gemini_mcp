@@ -1,0 +1,29 @@
+# Exemple de configuration – ne jamais committer les clés réelles
+gemini:
+  api_key: YOUR_GEMINI_API_KEY          # Remplacez par votre clé API Gemini (sandbox ou live)
+  api_secret: YOUR_GEMINI_API_SECRET    # Remplacez par votre secret API Gemini
+  sandbox: true                        # true = sandbox, false = live
+  base_url_v1: https://api.sandbox.gemini.com/v1  # endpoints privés (ordres, balances)
+  base_url_v2: https://api.sandbox.gemini.com/v2  # endpoints publics (chandeliers, tickers)
+
+strategy:
+  pair: BTCUSD
+  timeframe: 5m
+  sma_short: 20
+  sma_long: 50
+  rsi_period: 14
+  rsi_overbought: 70
+  rsi_oversold: 30
+  risk_per_trade: 0.01   # 1 % du capital
+  stop_loss_pct: 0.01    # 1 %
+  take_profit_pct: 0.02  # 2 %
+
+database:
+  path: gemini_mcp/trades.db
+
+# Optionnel – ajouter vos clés API pour d'autres services
+# finnhub:
+#   api_key: YOUR_FINNHUB_API_KEY
+#
+# coingecko:
+#   api_key: YOUR_COINGECKO_API_KEY   # optionnel

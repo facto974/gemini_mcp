@@ -1,0 +1,15 @@
+# Ignore local configuration with API keys
+config.yaml
+
+# Ignore virtual environment
+venv/
+
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+
+# Ignore logs
+*.log
+
+# Ignore SQLite database
+*.db

@@ -1,0 +1,5 @@
+requests
+pandas
+ta
+pyyaml
+prometheus_client
