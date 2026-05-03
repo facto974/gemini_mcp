@@ -1,15 +1,13 @@
-# Ignore local configuration with API keys
+.env
 config.yaml
-
-# Ignore virtual environment
 venv/
-
-# Ignore Python bytecode
 __pycache__/
 *.pyc
-
-# Ignore logs
+.pytest_cache/
+data/*.db
+data/*.csv
+.idea/
+.vscode/
+grafana_data/
+prometheus_data/
 *.log
-
-# Ignore SQLite database
-*.db

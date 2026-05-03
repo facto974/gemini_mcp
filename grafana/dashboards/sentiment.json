@@ -1,0 +1,39 @@
+{
+  "title": "GeminiMCP - Sentiment",
+  "uid": "gmcp-sentiment",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {"from": "now-24h", "to": "now"},
+  "panels": [
+    {
+      "id": 1,
+      "type": "gauge",
+      "title": "Fear & Greed Index",
+      "gridPos": {"x": 0, "y": 0, "w": 8, "h": 6},
+      "targets": [{"expr": "gmcp_fear_greed_index", "refId": "A"}],
+      "fieldConfig": {"defaults": {"min": 0, "max": 100, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": 0}, {"color": "orange", "value": 25}, {"color": "yellow", "value": 50}, {"color": "green", "value": 75}]}}}
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Reddit Sentiment Score",
+      "gridPos": {"x": 8, "y": 0, "w": 8, "h": 6},
+      "targets": [{"expr": "gmcp_reddit_sentiment", "legendFormat": "{{symbol}}", "refId": "A"}]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "StockTwits Bull/Bear ratio",
+      "gridPos": {"x": 16, "y": 0, "w": 8, "h": 6},
+      "targets": [{"expr": "gmcp_stocktwits_ratio", "legendFormat": "{{symbol}}", "refId": "A"}]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Composite Sentiment Score",
+      "gridPos": {"x": 0, "y": 6, "w": 24, "h": 8},
+      "targets": [{"expr": "gmcp_composite_sentiment", "legendFormat": "{{symbol}}", "refId": "A"}]
+    }
+  ]
+}

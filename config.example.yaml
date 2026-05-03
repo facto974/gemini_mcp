@@ -1,29 +1,50 @@
-# Exemple de configuration – ne jamais committer les clés réelles
-gemini:
-  api_key: YOUR_GEMINI_API_KEY          # Remplacez par votre clé API Gemini (sandbox ou live)
-  api_secret: YOUR_GEMINI_API_SECRET    # Remplacez par votre secret API Gemini
-  sandbox: true                        # true = sandbox, false = live
-  base_url_v1: https://api.sandbox.gemini.com/v1  # endpoints privés (ordres, balances)
-  base_url_v2: https://api.sandbox.gemini.com/v2  # endpoints publics (chandeliers, tickers)
+# ----------------- GeminiMCP-Trader config -----------------
 
+mode: paper           # paper | live | backtest
+sandbox: true         # bascule sandbox/live (live ⇒ false + sandbox: false)
+
+universe:
+  - BTC-USD
+  - ETH-USD
+  - SOL-USD
+
+# Boucle de trading (paper / live)
+loop_interval_sec: 60
+
+# Risk management
+risk:
+  max_position_usd: 1000
+  max_drawdown_pct: 0.15        # arrête le trading si DD > 15%
+  kelly_fraction: 0.25          # taille pos = kelly_fraction * equity
+  allow_short: false
+  stop_loss_pct: 0.05
+  take_profit_pct: 0.12
+
+# Stratégie hybride momentum + sentiment
 strategy:
-  pair: BTCUSD
-  timeframe: 5m
-  sma_short: 20
-  sma_long: 50
-  rsi_period: 14
-  rsi_overbought: 70
-  rsi_oversold: 30
-  risk_per_trade: 0.01   # 1 % du capital
-  stop_loss_pct: 0.01    # 1 %
-  take_profit_pct: 0.02  # 2 %
+  name: momentum_sentiment
+  weights:
+    momentum: 0.5
+    sentiment: 0.3
+    fear_greed: 0.2
+  thresholds:
+    long: 0.35
+    short: -0.35
+  momentum:
+    lookback_days: 7
+    ema_smooth: 24
+  sentiment:
+    reddit_subs: [wallstreetbets, CryptoCurrency, Bitcoin]
+    reddit_limit: 50
 
-database:
-  path: gemini_mcp/trades.db
+# LLM agent (OpenRouter)
+llm:
+  enabled: true
+  model: meta-llama/llama-3.3-70b-instruct:free
+  temperature: 0.2
+  validate_signals: true        # demande au LLM de challenger chaque signal
 
-# Optionnel – ajouter vos clés API pour d'autres services
-# finnhub:
-#   api_key: YOUR_FINNHUB_API_KEY
-#
-# coingecko:
-#   api_key: YOUR_COINGECKO_API_KEY   # optionnel
+# Observabilité
+metrics:
+  enabled: true
+  port: 8000
