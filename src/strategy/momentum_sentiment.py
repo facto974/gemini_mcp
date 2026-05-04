@@ -15,14 +15,14 @@ from . import indicators as ind
 
 @dataclass
 class StrategyConfig:
-    w_momentum: float = 0.5
-    w_sentiment: float = 0.3
+    w_momentum: float = 0.2
+    w_sentiment: float = 0.6
     w_fear_greed: float = 0.2
     lookback: int = 7
     ema_smooth: int = 24
-    threshold_long: float = 0.35
-    threshold_short: float = -0.35
-    allow_short: bool = False
+    threshold_long: float = 0.0
+    threshold_short: float = 0.0
+    allow_short: bool = True
 
 
 @dataclass

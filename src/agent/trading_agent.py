@@ -122,7 +122,11 @@ class TradingAgent:
             STOCKTWITS_RATIO.labels(symbol=symbol).set(snap.stocktwits)
             FEAR_GREED.set((snap.fear_greed + 1) * 50)  # back to 0-100
 
-            sig = self.strategy.evaluate(snap.ohlcv, snap.reddit, snap.stocktwits,
+            # Reddit subs are now a dict with weights
+            # Use the Reddit client stored in the aggregator
+            reddit_client = getattr(self.aggregator, "reddit", None)
+            reddit_score = reddit_client.sentiment(snap.symbol, self.s.reddit_subs, self.s.reddit_limit) if reddit_client else 0.0
+            sig = self.strategy.evaluate(snap.ohlcv, reddit_score, snap.stocktwits,
                                          snap.coingecko_social, snap.fear_greed)
             SCORE.labels(symbol=symbol).set(sig.score)
             COMPOSITE_SENT.labels(symbol=symbol).set(sig.sentiment)
@@ -130,7 +134,9 @@ class TradingAgent:
                                   sig.fear_greed, sig.decision)
 
             self._log(f"{symbol} px={snap.price:.2f} score={sig.score:+.3f} "
-                      f"decision={sig.decision}")
+                      f"decision={sig.decision} "
+                      f"reddit={snap.reddit:.3f} stocktwits={snap.stocktwits:.3f} "
+                      f"coingecko={snap.coingecko_social:.3f} fg={snap.fear_greed:.3f}")
 
             if sig.decision in ("LONG", "SHORT"):
                 action = "buy" if sig.decision == "LONG" else "sell"

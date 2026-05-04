@@ -58,6 +58,14 @@ class Settings:
         s.reddit_client_id = os.getenv("REDDIT_CLIENT_ID", "")
         s.reddit_client_secret = os.getenv("REDDIT_CLIENT_SECRET", "")
         s.reddit_user_agent = os.getenv("REDDIT_USER_AGENT", s.reddit_user_agent)
+        # Load reddit subs with weights from config
+        s.reddit_subs = cfg.get("strategy", {}).get("sentiment", {}).get("reddit_subs", {})
+        # Load reddit limit for sentiment aggregation
+        s.reddit_limit = int(cfg.get("strategy", {}).get("sentiment", {}).get("reddit_limit", 50))
+        # Force enable Reddit client for debugging
+        if s.reddit_client_id and s.reddit_client_secret:
+            s.reddit_client_id = s.reddit_client_id
+            s.reddit_client_secret = s.reddit_client_secret
         s.metrics_port = int(os.getenv("METRICS_PORT", str(cfg.get("metrics", {}).get("port", 8000))))
         s.sqlite_path = os.getenv("SQLITE_PATH", s.sqlite_path)
 

@@ -29,7 +29,7 @@ class RedditClient:
                                        user_agent=user_agent,
                                        check_for_async=False)
 
-    def sentiment(self, ticker: str, subs: list[str], limit: int = 50) -> float:
+    def sentiment(self, ticker: str, subs: dict[str, float], limit: int = 50) -> float:
         """Retourne un score normalisé [-1, 1]."""
         if not self.enabled:
             return 0.0
@@ -37,9 +37,9 @@ class RedditClient:
         total = 0
         n = 0
         try:
-            for sub in subs:
+            for sub, weight in subs.items():
                 for post in self._reddit.subreddit(sub).search(base, sort="new", limit=limit, time_filter="day"):
-                    total += _score(f"{post.title} {post.selftext or ''}")
+                    total += weight * _score(f"{post.title} {post.selftext or ''}")
                     n += 1
         except Exception:
             return 0.0
